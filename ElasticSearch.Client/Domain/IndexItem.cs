@@ -83,7 +83,7 @@ namespace ElasticSearch.Client.Domain
 			AddField(field, value);
 		}
 
-		void AddField(string field, object value)
+		public void AddField(string field, object value)
 		{
 			_fields.Add(new KeyValuePair<string, object>((string)RemoveInvalidChar(field), RemoveInvalidChar(value)));
 		}

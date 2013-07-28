@@ -22,13 +22,16 @@ namespace ElasticSearch.Client.Transport
 		{
 			_config = ElasticSearchConfig.Instance;
 
-			foreach (var esNode in _config.Clusters)
-			{
-				BuildCluster(esNode.ClusterName,esNode.TransportType);
-				ClusterThriftNodes[esNode.ClusterName] = BuildThriftNodes(esNode.ThriftNodes);
-				ClusterHttpNodes[esNode.ClusterName] = BuildHttpNodes(esNode.HttpNodes);
-			}
-			_rand = new Random((int) DateTime.Now.Ticks);
+		    if (_config.Clusters != null)
+		    {
+		        foreach (var esNode in _config.Clusters)
+		        {
+		            BuildCluster(esNode.ClusterName, esNode.TransportType);
+		            ClusterThriftNodes[esNode.ClusterName] = BuildThriftNodes(esNode.ThriftNodes);
+		            ClusterHttpNodes[esNode.ClusterName] = BuildHttpNodes(esNode.HttpNodes);
+		        }
+		    }
+		    _rand = new Random((int) DateTime.Now.Ticks);
 			ElasticSearchConfig.ConfigChanged += ElasticSearchConfig_ConfigChanged;
 		}
 
