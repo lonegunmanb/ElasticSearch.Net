@@ -186,7 +186,7 @@ namespace ElasticSearch.Client.Utils
 			{
                 //long ticks = ((DateTime)value).Ticks;
                 //return "new Date(" + ticks + ")";
-                return string.Format("\"{0}\"", ((DateTime)value).ToString("r"));
+                return string.Format("\"{0}\"", ((DateTime)value).ToString("O"));
 			}
 			if (valueType == SupportedTypes.Tdouble)
 			{

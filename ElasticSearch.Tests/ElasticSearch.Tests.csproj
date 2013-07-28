@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Json.Net.4.5">
+      <HintPath>..\libs\Json.Net.4.5.dll</HintPath>
+    </Reference>
     <Reference Include="Lucene.Net.2.9">
       <HintPath>..\libs\Lucene.Net.2.9.dll</HintPath>
     </Reference>
@@ -55,6 +58,7 @@
     <Compile Include="BulkOperatesTests.cs" />
     <Compile Include="ClusterSetupTests.cs" />
     <Compile Include="Conditional\QueryByConditionalTests.cs" />
+    <Compile Include="DateTimeSerializeTest.cs" />
     <Compile Include="Easy2Go.cs" />
     <Compile Include="ExceptionTests.cs" />
     <Compile Include="IndexingTests.cs" />
