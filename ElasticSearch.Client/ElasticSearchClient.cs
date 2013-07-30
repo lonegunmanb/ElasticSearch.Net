@@ -1027,12 +1027,17 @@ namespace ElasticSearch.Client
 			return Search(index, temp, elasticQuery);
 		}
 
-		public SearchResult Search(string index, string type, IQuery query,SortItem sortItem, int from = 0, int size = 5, string[] fields = null)
-		{
-			string[] temp = null;
-			if (type != null) temp = new[] { type };
-			return Search(index, temp, query,sortItem, from, size, fields);
-		}
+	    public SearchResult Search(string index, string type, IQuery query, SortItem sortItem, int from = 0, int size = 5,
+	                               string[] fields = null)
+	    {
+	        return Search(index, type, query, new[] {sortItem}, from, size, fields);
+	    }
+
+	    public SearchResult Search(string index, string type, IQuery query, SortItem[] sortItems, int from = 0,
+                                   int size = 5, string[] fields = null)
+        {
+            return Search(index, type == null ? null : new [] {type}, query, from, size, fields, sortItems);
+        }
 
 		public SearchResult Search(string index, string type, IQuery query,int from = 0, int size = 5)
 		{
@@ -1043,21 +1048,30 @@ namespace ElasticSearch.Client
 
 		public SearchResult Search(string index, string[] type, IQuery query,SortItem sortItem, int from, int size, string[] fields = null)
 		{
-			Contract.Assert(!string.IsNullOrEmpty(index));
-			Contract.Assert(query != null);
-			Contract.Assert(from >= 0);
-			Contract.Assert(size > 0);
-
-			var elasticQuery = new ElasticQuery(from, size);
-			elasticQuery.SetQuery(query);
-			if (sortItem != null)
-			{
-				elasticQuery.AddSortItem(sortItem);
-			}
-			if (fields != null) elasticQuery.AddFields(fields);
-
-			return Search(index, type, elasticQuery);
+		    return Search(index, type, query, from, size, fields, new SortItem[] {sortItem});
 		}
+
+        public SearchResult Search(string index, string[] type, IQuery query, int from, int size,
+                                   string[] fields = null, SortItem[] sortFields = null)
+        {
+            Contract.Assert(!string.IsNullOrEmpty(index));
+            Contract.Assert(query != null);
+            Contract.Assert(from >= 0);
+            Contract.Assert(size > 0);
+
+            var elasticQuery = new ElasticQuery(from, size);
+            elasticQuery.SetQuery(query);
+            if (sortFields != null)
+            {
+                foreach (var sortField in sortFields)
+                {
+                    elasticQuery.AddSortItem(sortField);
+                }
+            }
+            if (fields != null) elasticQuery.AddFields(fields);
+
+            return Search(index, type, elasticQuery);
+        }
 
 		#endregion
 	}

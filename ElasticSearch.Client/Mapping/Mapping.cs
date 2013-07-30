@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -32,6 +34,11 @@ namespace ElasticSearch.Client.Mapping
 			Type ="integer";
 		}
 
+        public NumberFieldSetting(NumType type)
+        {
+            Type = type.ToString().ToLower();
+        }
+
 		[JsonProperty("precision_step")]
 		public int PrecisionStep = 4;
 	}
@@ -40,7 +47,7 @@ namespace ElasticSearch.Client.Mapping
 	{
 		public DateFieldSetting()
 		{
-			Type = "boolean";
+            Type = "date";
 		}
 		[JsonProperty("format")]
 		public string Format;

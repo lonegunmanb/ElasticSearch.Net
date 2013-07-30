@@ -226,7 +226,7 @@ namespace Tests
         {
             var q = new TermQuery("gender","true");
             
-            client.Search(index, "type" , q,null, 0, 5,new string[]{"_id"});
+            client.Search(index, "type" , q,(SortItem)null, 0, 5,new string[]{"_id"});
         }
 
 #endregion
