@@ -229,6 +229,14 @@ namespace ElasticSearch.Client
 			return indexDocStatus;
 		}
 
+        public bool TypeExist(string index, string type)
+        {
+            string url = "/{0}/{1}".Fill(index, type);
+            RestResponse response = _provider.Head(url);
+
+            return response.Status == Transport.IDL.Status.OK;
+        }
+
 		public SearchResult Search(string index, string[] type, Conditional conditional, int from, int size)
 		{
 			return Search(index, type, conditional.Query, from, size);

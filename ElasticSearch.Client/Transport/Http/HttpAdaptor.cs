@@ -58,7 +58,7 @@ namespace ElasticSearch.Client.Transport.Http
                         var bytes = new byte[contentLength];
                         bytes = ReadFully(stream);
                         stream.Close();
-                        responseStr = Encoding.GetEncoding(encoding).GetString(bytes);
+                        responseStr = bytes.Length>0 ? Encoding.GetEncoding(encoding).GetString(bytes) : string.Empty;
                         result.SetBody(responseStr);
                         result.Status = Status.OK;
                     }
@@ -70,6 +70,7 @@ namespace ElasticSearch.Client.Transport.Http
             }
             catch (WebException e)
             {
+                result.Status = 0;
                 DateTime endtime = DateTime.Now;
                 if (e.Response != null)
                 {
@@ -81,6 +82,10 @@ namespace ElasticSearch.Client.Transport.Http
                             var reader = new StreamReader(stream);
                             responseStr = reader.ReadToEnd();
                             result.SetBody(responseStr);
+
+                            var httpWebResponse = e.Response as HttpWebResponse;
+
+                            result.Status = (Status) httpWebResponse.StatusCode;
                         }
                         catch (System.Exception exception)
                         {
@@ -91,7 +96,10 @@ namespace ElasticSearch.Client.Transport.Http
                 string msg = string.Format("Method:{2}, Url: {0},Body:{1},Encoding:{3},Time:{5},Response:{4}", url,
                                            reqdata,
                                            method, encoding, responseStr, endtime - start);
-                result.Status = Status.INTERNAL_SERVER_ERROR;
+                if (result.Status == 0)
+                {
+                    result.Status = Status.INTERNAL_SERVER_ERROR;
+                }
                 ExceptionHandler.HandleExceptionResponse(responseStr, msg);
             }
             return result;

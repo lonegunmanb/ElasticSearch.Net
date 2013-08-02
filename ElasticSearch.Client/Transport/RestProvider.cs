@@ -84,5 +84,10 @@ namespace ElasticSearch.Client.Transport
 		{
 			return Process(_clusterName, url, reqdata, encoding, Method.POST);
 		}
+
+        public RestResponse Head(string url)
+        {
+            return Process(_clusterName, url, null, null, Method.HEAD);
+        }
 	}
 }

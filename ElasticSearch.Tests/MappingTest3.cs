@@ -1,4 +1,5 @@
 using ElasticSearch.Client;
+using ElasticSearch.Client.Config;
 using ElasticSearch.Client.Mapping;
 using NUnit.Framework;
 
@@ -7,6 +8,22 @@ namespace Tests
     [TestFixture]
     public class MappingTest3
     {
+        [Test]
+        public void TestTypeExist()
+        {
+            var index = "1-2147483644";
+
+            var type = "Order";
+
+            ElasticSearchClient client = new ElasticSearchClient("127.0.0.1", 9200, TransportType.Http);
+
+            Assert.IsTrue(client.TypeExist(index, type));
+
+            var type2 = "Order2";
+
+            Assert.IsFalse(client.TypeExist(index, type2));
+        }
+
         [Test]
         public void TestCreateParentChildType()
         {
