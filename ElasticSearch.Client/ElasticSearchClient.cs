@@ -1056,11 +1056,12 @@ namespace ElasticSearch.Client
 
 		public SearchResult Search(string index, string[] type, IQuery query,SortItem sortItem, int from, int size, string[] fields = null)
 		{
-		    return Search(index, type, query, from, size, fields, new SortItem[] {sortItem});
+		    SortItem[] sortItems = sortItem == null ? null : new SortItem[] {sortItem};
+
+		    return Search(index, type, query, from, size, sortItems, fields);
 		}
 
-        public SearchResult Search(string index, string[] type, IQuery query, int from, int size,
-                                   string[] fields = null, SortItem[] sortFields = null)
+        public SearchResult Search(string index, string[] type, IQuery query, int from, int size, SortItem[] sortItems = null, string[] fields = null)
         {
             Contract.Assert(!string.IsNullOrEmpty(index));
             Contract.Assert(query != null);
@@ -1069,11 +1070,11 @@ namespace ElasticSearch.Client
 
             var elasticQuery = new ElasticQuery(from, size);
             elasticQuery.SetQuery(query);
-            if (sortFields != null)
+            if (sortItems != null)
             {
-                foreach (var sortField in sortFields)
+                foreach (var sortItem in sortItems)
                 {
-                    elasticQuery.AddSortItem(sortField);
+                    elasticQuery.AddSortItem(sortItem);
                 }
             }
             if (fields != null) elasticQuery.AddFields(fields);
